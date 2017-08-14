@@ -1,0 +1,10 @@
+type Resident {
+    id: Int!
+    name: String!
+    home: Home
+}
+
+extend type Query {
+    resident(id: Int!): Resident
+    allResidents: [Resident!]
+}

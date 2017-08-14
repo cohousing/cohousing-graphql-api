@@ -1,0 +1,11 @@
+type TenantInfo {
+    name: String
+}
+
+type Query {
+    info: TenantInfo
+}
+
+schema {
+    query: Query
+}

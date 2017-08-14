@@ -1,0 +1,33 @@
+{
+  "name": "cohousing-graphql-api",
+  "version": "1.0.0",
+  "description": "GraphQL API for Cohousing",
+  "main": "src/index.js",
+  "repository": "https://github.com/cohousing/cohousing-graphql-api",
+  "author": "Frank Bille-Stauner <frank@cohousing.nu>",
+  "license": "GPL-3.0",
+  "scripts": {
+    "start": "nodemon src/index.js --exec babel-node --presets es2015,stage-2 -i *.graphqls",
+    "build": "rimraf dist && babel src -d dist --source-maps inline --copy-files",
+    "build-watch": "babel src -d dist --watch --source-maps inline --copy-files"
+  },
+  "dependencies": {
+    "apollo-server-express": "^1.1.0",
+    "body-parser": "^1.17.2",
+    "dataloader": "^1.3.0",
+    "express": "^4.15.4",
+    "graphql": "^0.10.5",
+    "graphql-tools": "^1.1.0",
+    "knex": "^0.13.0",
+    "lodash": "^4.17.4",
+    "mariasql": "^0.2.6"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babel-register": "^6.24.1",
+    "nodemon": "^1.11.0",
+    "rimraf": "^2.6.1"
+  }
+}
