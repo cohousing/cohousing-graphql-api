@@ -1,8 +1,8 @@
 export const RootResolvers = {
     Query: {
-        info() {
+        info(obj, args, {tenant}) {
             return {
-                name: 'Tenant 1'
+                name: tenant.name
             }
         }
     }

@@ -1,16 +1,16 @@
 import DataLoader from 'dataloader';
-import {db} from '../../db';
 
 export class ResidentConnector {
-    constructor() {
+    constructor(request) {
+        this.db = request.tenant.db;
 
         this.loader = new DataLoader(ids => new Promise(resolve => {
-            db.select().from('residents').whereIn('id', ids).then(resolve);
+            this.db.select().from('residents').whereIn('id', ids).then(resolve);
         }));
     }
 
     getAllResidents() {
-        return db.select().from('residents');
+        return this.db.select().from('residents');
     }
 
     getResident(id) {

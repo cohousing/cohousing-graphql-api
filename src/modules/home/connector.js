@@ -1,13 +1,12 @@
 import DataLoader from 'dataloader';
 import {values} from 'lodash';
 
-import {db} from '../../db';
-
 export class HomeConnector {
-    constructor() {
+    constructor(request) {
+        this.db = request.tenant.db;
 
         this.loader = new DataLoader(ids => new Promise(resolve => {
-            db('homes')
+            this.db('homes')
                 .join('residents', 'homes.id', '=', 'residents.home_id')
                 .select('homes.*', 'residents.id as resident_id')
                 .whereIn('homes.id', ids)
@@ -34,7 +33,7 @@ export class HomeConnector {
     }
 
     getAllHomes() {
-        return db('homes')
+        return this.db('homes')
             .join('residents', 'homes.id', '=', 'residents.home_id')
             .select('homes.*', 'residents.id as resident_id').then(data => {
                 return this._flattenResult(data);

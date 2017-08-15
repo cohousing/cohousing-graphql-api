@@ -2,8 +2,8 @@ import {HomeConnector} from './connector';
 
 export {Schema, Resolver} from './schema';
 
-export function Context() {
+export function Context(request) {
     return {
-        homeConnector: new HomeConnector()
+        homeConnector: new HomeConnector(request)
     }
 }
