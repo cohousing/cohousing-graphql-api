@@ -17,6 +17,9 @@ export class TenantConfig {
                 migrations: {
                     tableName: 'KNEX_MIGRATIONS',
                     directory: __dirname + '/../migrations'
+                },
+                seeds: {
+                    directory: __dirname + '/../seeds'
                 }
             });
             tenant.db.migrate.latest().then(() => {
