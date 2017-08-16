@@ -7,6 +7,12 @@ export const settings = {
         password: ''
     },
 
+    auth: {
+        publicKeyPath: __dirname+'/../public.pem',
+        privateKeyPath: __dirname+'/../private.pem',
+        privateKeyPassphrase: 'test1234'
+    },
+
     development: {
         // Development property, to create test data on every start of the server.
         seedOnStart: true,
