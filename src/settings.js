@@ -15,7 +15,7 @@ export const settings = {
 
     development: {
         // Development property, to create test data on every start of the server.
-        seedOnStart: true,
+        seedOnStart: false,
 
         debugSql: false
     },

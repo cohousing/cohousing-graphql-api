@@ -1,0 +1,18 @@
+type Permission {
+    read: Boolean!
+    create: Boolean!
+    update: Boolean!
+    delete: Boolean!
+}
+
+type Role {
+    id: Int!
+    name: String!
+    home: Permission
+    resident: Permission
+    role: Permission
+}
+
+extend type Query {
+    allRoles: [Role!]
+}

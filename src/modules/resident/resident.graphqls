@@ -1,6 +1,7 @@
 type Resident {
     id: Int!
     name: String!
+    username: String
     home: Home
 }
 
