@@ -1,8 +1,11 @@
 import DataLoader from 'dataloader';
-import {values} from 'lodash';
+import { values } from 'lodash';
 
-export class HomeConnector {
+import { BaseConnector } from '../baseconnector';
+
+export class HomeConnector extends BaseConnector {
     constructor(request) {
+        super(request);
         this.db = request.tenant.db;
 
         this.loader = new DataLoader(ids => new Promise(resolve => {
@@ -33,18 +36,24 @@ export class HomeConnector {
     }
 
     getAllHomes() {
-        return this.db('homes')
-            .join('residents', 'homes.id', '=', 'residents.home_id')
-            .select('homes.*', 'residents.id as resident_id').then(data => {
-                return this._flattenResult(data);
-            });
+        return this.authz('home:read', () => {
+            return this.db('homes')
+                .join('residents', 'homes.id', '=', 'residents.home_id')
+                .select('homes.*', 'residents.id as resident_id').then(data => {
+                    return this._flattenResult(data);
+                });
+        }, []);
     }
 
     getHome(id) {
-        return this.loader.load(id);
+        return this.authz('home:read', () => {
+            return this.loader.load(id);
+        });
     }
 
     getHomes(ids) {
-        return this.loader.loadMany(ids);
+        return this.authz('home:read', () => {
+            return this.loader.loadMany(ids);
+        });
     }
 }

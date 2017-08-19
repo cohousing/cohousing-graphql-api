@@ -1,7 +1,10 @@
 import DataLoader from 'dataloader';
 
-export class ResidentConnector {
+import {BaseConnector} from '../baseconnector';
+
+export class ResidentConnector extends BaseConnector {
     constructor(request) {
+        super(request);
         this.db = request.tenant.db;
 
         this.loader = new DataLoader(ids => new Promise(resolve => {
@@ -10,14 +13,20 @@ export class ResidentConnector {
     }
 
     getAllResidents() {
-        return this.db.select().from('residents');
+        return this.authz('resident:read', () => {
+            return this.db.select().from('residents');
+        });
     }
 
     getResident(id) {
-        return this.loader.load(id);
+        return this.authz('resident:read', () => {
+            return this.loader.load(id);
+        });
     }
 
     getResidents(ids) {
-        return this.loader.loadMany(ids);
+        return this.authz('resident:read', () => {
+            return this.loader.loadMany(ids);
+        });
     }
 }
