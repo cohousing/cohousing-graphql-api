@@ -1,25 +1,26 @@
 import DataLoader from 'dataloader';
-import { values } from 'lodash';
+import sort from 'dataloader-sort';
+import {values} from 'lodash';
 
-import { BaseConnector } from '../baseconnector';
+import {BaseConnector} from '../baseconnector';
 
 export class HomeConnector extends BaseConnector {
     constructor(request) {
         super(request);
         this.db = request.tenant.db;
 
-        this.loader = new DataLoader(ids => new Promise(resolve => {
-            this.db('homes')
+        this.loader = new DataLoader(ids => {
+            return this.db('homes')
                 .join('residents', 'homes.id', '=', 'residents.home_id')
                 .select('homes.*', 'residents.id as resident_id')
                 .whereIn('homes.id', ids)
                 .then(data => {
-                    resolve(this._flattenResult(data));
+                    return sort(ids, HomeConnector._flattenResult(data));
                 });
-        }));
+        });
     }
 
-    _flattenResult(data) {
+    static _flattenResult(data) {
         return values(data.reduce((flat, val) => {
             let elm = flat[val.id];
             if (!elm) {
@@ -40,7 +41,7 @@ export class HomeConnector extends BaseConnector {
             return this.db('homes')
                 .join('residents', 'homes.id', '=', 'residents.home_id')
                 .select('homes.*', 'residents.id as resident_id').then(data => {
-                    return this._flattenResult(data);
+                    return HomeConnector._flattenResult(data);
                 });
         }, []);
     }

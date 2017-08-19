@@ -1,4 +1,5 @@
 import DataLoader from 'dataloader';
+import sort from 'dataloader-sort';
 
 import {BaseConnector} from '../baseconnector';
 
@@ -7,9 +8,13 @@ export class ResidentConnector extends BaseConnector {
         super(request);
         this.db = request.tenant.db;
 
-        this.loader = new DataLoader(ids => new Promise(resolve => {
-            this.db.select().from('residents').whereIn('id', ids).then(resolve);
-        }));
+        this.loader = new DataLoader(ids => {
+            return this.db('residents')
+                .whereIn('id', ids)
+                .then(data => {
+                    return sort(ids, data);
+                });
+        });
     }
 
     getAllResidents() {
