@@ -16,7 +16,7 @@ let app = express();
 
 app.use(tenant(tenantConfig));
 
-app.post('/login', urlencoded(), login(settings));
+app.post('/login', json(), login(settings));
 
 app.use('/graphql', auth(settings), json(), graphqlExpress(request => ({
     schema: schema,

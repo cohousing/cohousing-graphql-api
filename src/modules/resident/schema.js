@@ -15,6 +15,10 @@ export const Resolver = {
 
         resident(obj, args, {residentConnector}) {
             return residentConnector.getResident(args.id);
+        },
+
+        loggedInResident(obj, args, {residentConnector}) {
+            return residentConnector.getLoggedInResident();
         }
     },
 

@@ -18,7 +18,13 @@ export function auth(settings) {
                     next(new Error(err));
                 } else {
                     req.user = decoded;
-                    next();
+                    req.tenant.db('residents')
+                        .where('username', decoded.sub)
+                        .first()
+                        .then(resident => {
+                            req.resident = resident;
+                            next();
+                        });
                 }
             });
         } else {
@@ -63,7 +69,9 @@ export function login(settings) {
                                     subject: username
                                 });
 
-                                res.redirect("/?id_token=" + idToken);
+                                res.status(200).send({
+                                    token: idToken
+                                });
                             });
                     } else {
                         res.status(401).send();

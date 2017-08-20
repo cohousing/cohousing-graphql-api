@@ -8,4 +8,6 @@ type Resident {
 extend type Query {
     resident(id: Int!): Resident
     allResidents: [Resident!]
+
+    loggedInResident: Resident
 }

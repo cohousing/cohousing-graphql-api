@@ -7,6 +7,7 @@ export class ResidentConnector extends BaseConnector {
     constructor(request) {
         super(request);
         this.db = request.tenant.db;
+        this.resident = request.resident;
 
         this.loader = new DataLoader(ids => {
             return this.db('residents')
@@ -33,5 +34,9 @@ export class ResidentConnector extends BaseConnector {
         return this.authz('resident:read', () => {
             return this.loader.loadMany(ids);
         });
+    }
+
+    getLoggedInResident() {
+        return this.resident;
     }
 }
