@@ -23,7 +23,8 @@ export const settings = {
     // TODO These should come from dynamically configured endpoints
     tenants: [{
         context: 'tenant1',
-        name: 'Tenant 1'
+        name: 'Tenant 1',
+        customDomain: 'localhost'
     }, {
         context: 'tenant2',
         name: 'Tenant 2'

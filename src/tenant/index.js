@@ -31,6 +31,9 @@ export class TenantConfig {
             });
 
             this.tenants[settings.tenantDomain.replace('{tenantContext}', tenant.context)] = tenant;
+            if (tenant.customDomain) {
+                this.tenants[tenant.customDomain] = tenant;
+            }
         });
     }
 
