@@ -1,0 +1,11 @@
+type User {
+    id: Int!
+    username: String!
+    resident: Resident
+    superAdmin: Boolean!
+}
+
+extend type Query {
+    allUsers: [User!]!
+    user(id: Int!): User
+}
