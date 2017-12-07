@@ -1,7 +1,5 @@
 import fs from 'fs';
 
-import {Permission} from './permission';
-
 const RoleSchema = fs.readFileSync(__dirname + '/role.graphqls', 'UTF-8');
 
 export function Schema() {
@@ -15,17 +13,21 @@ export const Resolver = {
         }
     },
 
-    Role: {
-        home(obj) {
-            return Permission.fromSqlValue(obj.home);
+    Mutation: {
+        createRole(obj, args, {roleConnector}) {
+            return roleConnector.createRole(args.role);
         },
 
-        resident(obj) {
-            return Permission.fromSqlValue(obj.resident);
+        updateRole(obj, args, {roleConnector}) {
+            return roleConnector.updateRole(args.id, args.role);
         },
 
-        role(obj) {
-            return Permission.fromSqlValue(obj.role);
+        connectRolesAndUsers(obj, args, {roleConnector}) {
+            return roleConnector.connectRolesAndUsers(args.roleIds, args.userIds);
+        },
+
+        disconnectRolesAndUsers(obj, args, {roleConnector}) {
+            return roleConnector.disconnectRolesAndUsers(args.roleIds, args.userIds);
         }
     }
 };

@@ -1,4 +1,5 @@
 type Permission {
+    objectType: String!
     read: Boolean!
     create: Boolean!
     update: Boolean!
@@ -8,11 +9,29 @@ type Permission {
 type Role {
     id: Int!
     name: String!
-    home: Permission
-    resident: Permission
-    role: Permission
+    permissions: [Permission!]
 }
 
 extend type Query {
     allRoles: [Role!]
+}
+
+input PermissionInput {
+    objectType: String!
+    create: Boolean!
+    read: Boolean!
+    update: Boolean!
+    delete: Boolean!
+}
+
+input RoleInput {
+    name: String!
+    permissions: [PermissionInput!]!
+}
+
+extend type Mutation {
+    createRole(role: RoleInput!): Role!
+    updateRole(id: Int!, role: RoleInput!): Role!
+    connectRolesAndUsers(roleIds: [Int!]!, userIds: [Int!]!): Boolean!
+    disconnectRolesAndUsers(roleIds: [Int!]!, userIds: [Int!]!): Boolean!
 }

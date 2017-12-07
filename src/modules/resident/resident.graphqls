@@ -1,13 +1,15 @@
 type Resident {
     id: Int!
     name: String!
-    username: String
     home: Home
 }
 
 extend type Query {
     resident(id: Int!): Resident
     allResidents: [Resident!]
+}
 
-    loggedInResident: Resident
+extend type Mutation {
+    createResident(name: String!, homeId: Int): Resident!
+    updateResident(id: Int!, name: String!, homeId: Int): Resident!
 }

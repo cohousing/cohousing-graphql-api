@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import {readFileSync} from 'fs';
 import {sign, verify} from 'jsonwebtoken';
 
-import {Role} from "../modules/role/role";
+import {mergePermissions} from '../modules/role';
 
 export function auth(settings) {
     let publicKey = readFileSync(settings.auth.publicKeyPath);
@@ -18,11 +18,11 @@ export function auth(settings) {
                     next(new Error(err));
                 } else {
                     req.user = decoded;
-                    req.tenant.db('residents')
+                    req.tenant.db('users')
                         .where('username', decoded.sub)
                         .first()
-                        .then(resident => {
-                            req.resident = resident;
+                        .then(user => {
+                            req.loggedInUser = user;
                             next();
                         });
                 }
@@ -41,25 +41,26 @@ export function login(settings) {
         let password = req.body.password;
 
         if (username && password) {
-            req.tenant.db('residents').where('username', username).then(users => {
+            req.tenant.db('users').where('username', username).then(users => {
                 if (users.length === 1) {
                     let user = users[0];
 
                     let verifyPassword = crypto.pbkdf2Sync(password, user.salt, 10000, 64, 'sha512').toString('hex');
 
                     if (verifyPassword === user.password) {
-                        req.tenant.db('residents_roles')
-                            .join('roles', 'residents_roles.role_id', '=', 'roles.id')
-                            .where('residents_roles.resident_id', user.id)
+                        req.tenant.db('users_roles')
+                            .join('roles', 'users_roles.role_id', '=', 'roles.id')
+                            .where('users_roles.user_id', user.id)
                             .then(roles => {
-                                let resultRole = new Role();
-                                roles.forEach(role => {
-                                    resultRole.mergePermissionsWithSql(role);
-                                });
+                                let payload = {
+                                    permission: mergePermissions(roles)
+                                };
 
-                                let idToken = sign({
-                                    permission: resultRole.toExternalPermissions()
-                                }, {
+                                if (user.super_admin) {
+                                    payload.sa = true;
+                                }
+
+                                let idToken = sign(payload, {
                                     key: privateKey,
                                     passphrase: settings.auth.privateKeyPassphrase
                                 }, {

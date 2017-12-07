@@ -8,8 +8,8 @@ export const settings = {
     },
 
     auth: {
-        publicKeyPath: __dirname+'/../public.pem',
-        privateKeyPath: __dirname+'/../private.pem',
+        publicKeyPath: __dirname + '/../public.pem',
+        privateKeyPath: __dirname + '/../private.pem',
         privateKeyPassphrase: 'test1234'
     },
 

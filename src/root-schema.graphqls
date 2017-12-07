@@ -6,6 +6,11 @@ type Query {
     info: TenantInfo
 }
 
+type Mutation {
+    dummyChange(id: Int!): String
+}
+
 schema {
     query: Query
+    mutation: Mutation
 }

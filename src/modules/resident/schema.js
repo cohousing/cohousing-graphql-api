@@ -15,10 +15,16 @@ export const Resolver = {
 
         resident(obj, args, {residentConnector}) {
             return residentConnector.getResident(args.id);
+        }
+    },
+
+    Mutation: {
+        createResident(obj, args, {residentConnector}) {
+            return residentConnector.createResident(args.name, args.username, args.password, args.homeId);
         },
 
-        loggedInResident(obj, args, {residentConnector}) {
-            return residentConnector.getLoggedInResident();
+        updateResident(obj, args, {residentConnector}) {
+            return residentConnector.updateResident(args.id, args.name, args.homeId);
         }
     },
 

@@ -18,6 +18,16 @@ export const Resolver = {
         }
     },
 
+    Mutation: {
+        createHome(obj, args, {homeConnector}) {
+            return homeConnector.createHome(args.name);
+        },
+
+        updateHome(obj, args, {homeConnector}) {
+            return homeConnector.updateHome(args.id, args.name);
+        }
+    },
+
     Home: {
         residents(obj, args, {residentConnector}) {
             if (obj.residents) {

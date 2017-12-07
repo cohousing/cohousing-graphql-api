@@ -11,3 +11,8 @@ extend type Query {
     home(id: Int!): Home
     allHomes: [Home!]
 }
+
+extend type Mutation {
+    createHome(name: String!): Home!
+    updateHome(id: Int!, name: String!): Home!
+}

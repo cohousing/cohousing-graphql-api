@@ -12,7 +12,9 @@
     "build-watch": "babel src -d dist --watch --source-maps inline --copy-files"
   },
   "dependencies": {
+    "apollo-errors": "^1.5.1",
     "apollo-server-express": "^1.1.0",
+    "async": "^2.6.0",
     "body-parser": "^1.17.2",
     "cors": "^2.8.4",
     "dataloader": "^1.3.0",
