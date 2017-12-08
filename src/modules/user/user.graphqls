@@ -9,3 +9,7 @@ extend type Query {
     allUsers: [User!]!
     user(id: Int!): User
 }
+
+extend type Mutation {
+    createUser(username:String!, password:String!, superAdmin: Boolean!, residentId: Int): User!
+}

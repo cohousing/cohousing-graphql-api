@@ -18,6 +18,12 @@ export const Resolver = {
         }
     },
 
+    Mutation: {
+        createUser(obj, args, {userConnector}) {
+            return userConnector.createUser(args.username, args.password, args.residentId, args.superAdmin);
+        }
+    },
+
     User: {
         resident(obj, args, {residentConnector}) {
             if (obj.resident_id) {
