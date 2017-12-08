@@ -1,3 +1,13 @@
+import {AuditConnector} from './connector';
+
+export {Schema, Resolver} from './schema';
+
+export function Context(request) {
+    return {
+        auditConnector: new AuditConnector(request)
+    }
+}
+
 /**
  * Remove unchanged properties
  *

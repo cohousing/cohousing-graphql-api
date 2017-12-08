@@ -29,6 +29,12 @@ export class RoleConnector extends BaseConnector {
         });
     }
 
+    getRole(id) {
+        return this.authz('role:read').then(() => {
+            return this.loader.load(id);
+        });
+    }
+
     createRole(roleInput) {
         let self = this;
         return self.authz('role:create').then(() => {

@@ -1,0 +1,83 @@
+enum AuditOperation {
+    CREATE
+    READ
+    UPDATE
+    DELETE
+}
+
+interface Audit {
+    id: Int!
+    auditDate: DateTime!
+    auditUser: User!
+    objectType: String!
+    objectId: Int!
+    operation: AuditOperation!
+    change: String!
+}
+
+type DefaultAudit implements Audit {
+    id: Int!
+    auditDate: DateTime!
+    auditUser: User!
+    objectType: String!
+    objectId: Int!
+    operation: AuditOperation!
+    change: String!
+}
+
+type HomeAudit implements Audit {
+    id: Int!
+    auditDate: DateTime!
+    auditUser: User!
+    objectType: String!
+    objectId: Int!
+    operation: AuditOperation!
+    change: String!
+
+    # Can be null, if the operation is DELETE
+    home: Home
+}
+
+type ResidentAudit implements Audit {
+    id: Int!
+    auditDate: DateTime!
+    auditUser: User!
+    objectType: String!
+    objectId: Int!
+    operation: AuditOperation!
+    change: String!
+
+    # Can be null, if the operation is DELETE
+    resident: Resident
+}
+
+type RoleAudit implements Audit {
+    id: Int!
+    auditDate: DateTime!
+    auditUser: User!
+    objectType: String!
+    objectId: Int!
+    operation: AuditOperation!
+    change: String!
+
+    # Can be null, if the operation is DELETE
+    role: Role
+}
+
+type UserAudit implements Audit {
+    id: Int!
+    auditDate: DateTime!
+    auditUser: User!
+    objectType: String!
+    objectId: Int!
+    operation: AuditOperation!
+    change: String!
+
+    # Can be null, if the operation is DELETE
+    user: User
+}
+
+extend type Query {
+    allAudits: [Audit!]!
+    auditsFor(objectType: String!, objectId: Int!): [Audit!]!
+}

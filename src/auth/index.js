@@ -15,6 +15,7 @@ export function auth(settings) {
                 audience: req.tenant.context
             }, (err, decoded) => {
                 if (err) {
+                    console.log(typeof(err), err.constructor, err);
                     next(new Error(err));
                 } else {
                     req.user = decoded;
@@ -65,7 +66,7 @@ export function login(settings) {
                                     passphrase: settings.auth.privateKeyPassphrase
                                 }, {
                                     algorithm: 'RS512',
-                                    expiresIn: '1h',
+                                    expiresIn: '1d',
                                     audience: req.tenant.context,
                                     subject: username
                                 });

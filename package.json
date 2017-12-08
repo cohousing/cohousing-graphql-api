@@ -25,7 +25,8 @@
     "jsonwebtoken": "^7.4.2",
     "knex": "^0.13.0",
     "lodash": "^4.17.4",
-    "mariasql": "^0.2.6"
+    "mariasql": "^0.2.6",
+    "moment": "^2.19.3"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
