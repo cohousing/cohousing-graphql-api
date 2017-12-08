@@ -21,6 +21,10 @@ export const Resolver = {
     Mutation: {
         createUser(obj, args, {userConnector}) {
             return userConnector.createUser(args.username, args.password, args.residentId, args.superAdmin);
+        },
+
+        updateUser(obj, args, {userConnector}) {
+            return userConnector.updateUser(args.id, args.residentId, args.superAdmin);
         }
     },
 

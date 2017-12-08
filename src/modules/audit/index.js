@@ -30,15 +30,19 @@ export const OPERATION_DELETE = 'delete';
 export function createAudit(db, user, type, objectId, operation, change) {
     change = cleanUpChange(change);
 
-    return db('audit').insert({
-        type: type,
-        "user_id": user.id,
-        "object_id": objectId,
-        operation: operation,
-        change: JSON.stringify(change)
-    }).then((results) => {
-        if (results.length !== 1) {
-            throw new Error('Couldn\'t insert audit');
-        }
-    });
+    if (Object.keys(change).length > 0) {
+        return db('audit').insert({
+            type: type,
+            "user_id": user.id,
+            "object_id": objectId,
+            operation: operation,
+            change: JSON.stringify(change)
+        }).then((results) => {
+            if (results.length !== 1) {
+                throw new Error('Couldn\'t insert audit');
+            }
+        });
+    } else {
+        return false;
+    }
 }

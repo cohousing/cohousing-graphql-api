@@ -11,5 +11,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    createUser(username:String!, password:String!, superAdmin: Boolean!, residentId: Int): User!
+    createUser(username:String!, password:String!, residentId: Int, superAdmin: Boolean!): User!
+    updateUser(id: Int!, residentId: Int, superAdmin: Boolean!): User!
+
 }

@@ -3,9 +3,9 @@ import DataLoader from 'dataloader';
 import sort from 'dataloader-sort';
 
 import {BaseConnector} from '../baseconnector';
-import {createAudit, OPERATION_CREATE} from "../audit";
+import {createAudit, OPERATION_CREATE, OPERATION_UPDATE} from "../audit";
 
-import {UsernameNotAvailableError, ResidentDoesNotExistError} from './errors';
+import {UsernameNotAvailableError, ResidentDoesNotExistError, UserDoesNotExistError} from './errors';
 
 export class UserConnector extends BaseConnector {
     constructor(request) {
@@ -82,7 +82,7 @@ export class UserConnector extends BaseConnector {
                 salt,
                 resident_id: residentId,
                 super_admin: superAdmin
-            }).then(function (id) {
+            }).then((id) => {
                 createAudit(self.db, self.loggedInUser, 'user', id, OPERATION_CREATE, {
                     username: {
                         o: null,
@@ -99,6 +99,66 @@ export class UserConnector extends BaseConnector {
                 });
                 return self.loader.load(id[0]);
             });
+        });
+    }
+
+    updateUser(id, residentId, superAdmin) {
+        if (!residentId) {
+            residentId = null;
+        }
+
+        let existingUser;
+
+        let self = this;
+        return self.authz('user:update').then(() => {
+            return self.db('users')
+                .where('id', id)
+                .first();
+        }).then(foundUser => {
+            if (!foundUser) {
+                throw new UserDoesNotExistError({
+                    data: {
+                        userId: id
+                    }
+                });
+            }
+
+            existingUser = foundUser;
+
+            if (residentId) {
+                return self.db('residents')
+                    .where('id', residentId)
+                    .first();
+            } else {
+                return true;
+            }
+        }).then(residentExist => {
+            if (!residentExist) {
+                throw new ResidentDoesNotExistError({
+                    data: {
+                        residentId: residentId
+                    }
+                })
+            }
+
+            return self.db('users')
+                .where('id', id)
+                .update({
+                    resident_id: residentId,
+                    super_admin: superAdmin
+                }).then(() => {
+                    createAudit(self.db, self.loggedInUser, 'user', id, OPERATION_UPDATE, {
+                        residentId: {
+                            o: existingUser.resident_id ? existingUser.resident_id : null,
+                            n: residentId
+                        },
+                        superAdmin: {
+                            o: existingUser.super_admin === '1',
+                            n: superAdmin
+                        }
+                    });
+                    return self.loader.load(id);
+                });
         });
     }
 }
