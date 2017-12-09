@@ -142,6 +142,7 @@ export class RoleConnector extends BaseConnector {
     _disconnectRolesAndUsers(roleIds, userIds, trx) {
         return this.db
             .transacting(trx)
+            .forUpdate()
             .countDistinct('roles.id as roleCount')
             .countDistinct('users.id as userCount')
             .from('roles')

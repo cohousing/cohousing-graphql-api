@@ -4,6 +4,7 @@ import async from 'async';
 import {HomeConnector} from '../modules/home/connector';
 import {ResidentConnector} from '../modules/resident/connector';
 import {RoleConnector} from '../modules/role/connector';
+import {UserConnector} from '../modules/user/connector';
 
 exports.seed = function (knex) {
     let request = {
@@ -11,26 +12,14 @@ exports.seed = function (knex) {
             db: knex
         },
         user: {
-            permission: [
-                'home:create',
-                'home:read',
-                'home:update',
-                'home:delete',
-                'resident:create',
-                'resident:read',
-                'resident:update',
-                'resident:delete',
-                'role:create',
-                'role:read',
-                'role:update',
-                'role:delete',
-            ]
+            sa: true
         }
     };
 
     let homeConnector;
     let residentConnector;
     let roleConnector;
+    let userConnector;
 
     let roles;
 
@@ -59,6 +48,7 @@ exports.seed = function (knex) {
         homeConnector = new HomeConnector(request);
         residentConnector = new ResidentConnector(request);
         roleConnector = new RoleConnector(request);
+        userConnector = new UserConnector(request);
         return knex('users').insert(superAdminUser);
     }).then((adminId) => {
         request.loggedInUser.id = adminId[0];
@@ -173,47 +163,18 @@ exports.seed = function (knex) {
 
         residents.forEach(resident => {
             let username = resident.name.replace(' ', '').toLowerCase();
-
-            let salt = crypto.randomBytes(32).toString('hex');
-            let generatedPassword = crypto.pbkdf2Sync(username, salt, 10000, 64, 'sha512').toString('hex');
-            users.push(knex('users').insert({
-                username: username,
-                password: generatedPassword,
-                salt: salt,
-                resident_id: resident.id
-            }));
+            users.push(userConnector.createUser(username, username, resident.id, false));
         });
 
         return Promise.all(users);
-    }).then((userIds) => {
+    }).then((users) => {
         let usersRoles = [];
 
-        for (let i = 1; i <= 5; i++) {
-            usersRoles.push({
-                user_id: userIds[i - 1],
-                role_id: roles[0].id
-            });
-        }
+        usersRoles.push(roleConnector.connectRolesAndUsers([roles[0].id], users.slice(0, 5).map(user => user.id)));
+        usersRoles.push(roleConnector.connectRolesAndUsers([roles[1].id, roles[2].id], users.slice(5, 10).map(user => user.id)));
+        usersRoles.push(roleConnector.connectRolesAndUsers([roles[2].id], users.slice(10, 95).map(user => user.id)));
 
-        for (let i = 6; i <= 10; i++) {
-            usersRoles.push({
-                user_id: userIds[i - 1],
-                role_id: roles[1].id
-            });
-            usersRoles.push({
-                user_id: userIds[i - 1],
-                role_id: roles[2].id
-            });
-        }
-
-        for (let i = 11; i <= 95; i++) {
-            usersRoles.push({
-                user_id: userIds[i - 1],
-                role_id: roles[2].id
-            });
-        }
-
-        return knex('users_roles').insert(usersRoles);
+        return Promise.all(usersRoles);
     }).then(() => {
         console.log('DONE')
     }, (error) => {
