@@ -9,9 +9,8 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "yarn.lock" }}
+      - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      - run: chmod +x ./cc-test-reporter
 
       - run: yarn install
 
@@ -20,6 +19,8 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "yarn.lock" }}
 
+      - run: ./cc-test-reporter before-build
+
       - run:
           name: "Run Tests"
           command: yarn test -- --ci --testResultsProcessor="jest-junit"
@@ -27,6 +28,8 @@ jobs:
             JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
             JEST_JUNIT_CLASSNAME: "{classname}"
             JEST_JUNIT_TITLE: "{title}"
+
+      - run: ./cc-test-reporter after-build --exit-code $EXIT_CODE $?
 
       - store_test_results:
           path: reports/junit

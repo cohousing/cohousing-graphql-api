@@ -4,6 +4,11 @@ Cohousing Backend
 Backend for Cohousing tenants, handling persistence of data, authorization and
 exposing the API through a [GraphQL][graphql] interface.
 
+Status
+------
+
+[![CircleCI](https://circleci.com/gh/cohousing/cohousing-graphql-api/tree/master.svg?style=svg)](https://circleci.com/gh/cohousing/cohousing-graphql-api/tree/master)
+
 Installation
 ------------
 
