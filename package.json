@@ -9,7 +9,8 @@
   "scripts": {
     "start": "nodemon src/index.js --exec babel-node --presets es2015,stage-2 -i *.graphqls",
     "build": "rimraf dist && babel src -d dist --source-maps inline --copy-files",
-    "build-watch": "babel src -d dist --watch --source-maps inline --copy-files"
+    "build-watch": "babel src -d dist --watch --source-maps inline --copy-files",
+    "build-docker": "yarn build && docker build -t cohousing/cohousing-graphql-api ."
   },
   "dependencies": {
     "apollo-errors": "^1.5.1",

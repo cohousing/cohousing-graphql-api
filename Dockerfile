@@ -1,14 +1,12 @@
-FROM node:6-alpine
+FROM node:8
 
 WORKDIR /cohousing
 
 COPY package.json .
 COPY yarn.lock .
-RUN yarn install
+RUN yarn install --production
 
 COPY dist dist
-
-RUN ls -la
 
 EXPOSE 3000
 
