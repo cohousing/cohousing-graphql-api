@@ -25,6 +25,8 @@ jobs:
           command: yarn test -- --ci --testResultsProcessor="jest-junit"
           environment:
             JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
+            JEST_JUNIT_CLASSNAME: "{classname}"
+            JEST_JUNIT_TITLE: "{title}"
 
       - store_test_results:
           path: reports/junit
