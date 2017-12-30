@@ -25,6 +25,7 @@
     ],
     "collectCoverageFrom": [
       "src/**/*.js",
+      "!src/settings.js",
       "!src/seeds/*.js",
       "!src/migrations/*.js"
     ]
@@ -39,7 +40,7 @@
     "dataloader-sort": "^0.0.5",
     "express": "^4.15.4",
     "graphql": "^0.10.5",
-    "graphql-tools": "^1.1.0",
+    "graphql-tools": "^2.14.1",
     "jsonwebtoken": "^7.4.2",
     "knex": "^0.13.0",
     "lodash": "^4.17.4",
