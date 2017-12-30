@@ -102,93 +102,49 @@ class TestDataLoader {
     }
 
     createAdminRole() {
-        let self = this;
-        return step => {
-            self.roleConnector.createRole({
-                name: 'Admin',
-                permissions: [{
-                    objectType: 'home',
-                    create: true,
-                    read: true,
-                    update: true,
-                    delete: true
-                }, {
-                    objectType: 'resident',
-                    create: true,
-                    read: true,
-                    update: true,
-                    delete: true
-                }, {
-                    objectType: 'role',
-                    create: true,
-                    read: true,
-                    update: true,
-                    delete: true
-                }]
-            }).then(role => {
-                step(null, role);
-            });
-        };
+        return this.createRole('Admin', [
+            TestDataLoader.addPermission('home', true, true, true, true),
+            TestDataLoader.addPermission('resident', true, true, true, true),
+            TestDataLoader.addPermission('role', true, true, true, true)
+        ]);
     }
 
     createUserRole() {
+        return this.createRole('User', [
+            TestDataLoader.addPermission('home', false, true, false, false),
+            TestDataLoader.addPermission('resident', false, true, false, false),
+            TestDataLoader.addPermission('role', false, false, false, false)
+        ]);
+    }
+
+    createModeratorRole() {
+        return this.createRole('Moderator', [
+            TestDataLoader.addPermission('home', true, true, true, false),
+            TestDataLoader.addPermission('resident', true, true, true, false),
+            TestDataLoader.addPermission('role', false, true, false, false)
+        ]);
+    }
+
+    createRole(name, permissions) {
         let self = this;
         return step => {
             self.roleConnector.createRole({
-                name: 'User',
-                permissions: [{
-                    objectType: 'home',
-                    create: false,
-                    read: true,
-                    update: false,
-                    delete: false
-                }, {
-                    objectType: 'resident',
-                    create: false,
-                    read: true,
-                    update: false,
-                    delete: false
-                }, {
-                    objectType: 'role',
-                    create: false,
-                    read: false,
-                    update: false,
-                    delete: false
-                }]
+                name,
+                permissions
             }).then(role => {
                 step(null, role);
             });
         };
     }
 
-    createModeratorRole() {
-        let self = this;
-        return step => {
-            self.roleConnector.createRole({
-                name: 'Moderator',
-                permissions: [{
-                    objectType: 'home',
-                    create: true,
-                    read: true,
-                    update: true,
-                    delete: false
-                }, {
-                    objectType: 'resident',
-                    create: true,
-                    read: true,
-                    update: true,
-                    delete: false
-                }, {
-                    objectType: 'role',
-                    create: false,
-                    read: true,
-                    update: false,
-                    delete: false
-                }]
-            }).then(role => {
-                step(null, role);
-            });
-        };
+    static addPermission(objectType, create, read, update, del) {
+        return {
+            objectType,
+            create,
+            read,
+            update,
+            delete: del
+        }
     }
 
     createHomes(knex) {

@@ -24,7 +24,9 @@
       "html"
     ],
     "collectCoverageFrom": [
-      "src/**/*.js"
+      "src/**/*.js",
+      "!src/seeds/*.js",
+      "!src/migrations/*.js"
     ]
   },
   "dependencies": {
