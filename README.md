@@ -7,7 +7,10 @@ exposing the API through a [GraphQL][graphql] interface.
 Status
 ------
 
-[![CircleCI](https://circleci.com/gh/cohousing/cohousing-graphql-api/tree/master.svg?style=svg)](https://circleci.com/gh/cohousing/cohousing-graphql-api/tree/master)
+[![CircleCI branch](https://img.shields.io/circleci/project/github/cohousing/cohousing-graphql-api/master.svg?style=for-the-badge)](https://circleci.com/gh/cohousing/cohousing-graphql-api)
+[![Code Climate](https://img.shields.io/codeclimate/maintainability/cohousing/cohousing-graphql-api.svg?style=for-the-badge)](https://codeclimate.com/github/cohousing/cohousing-graphql-api/maintainability)
+[![Code Climate](https://img.shields.io/codeclimate/issues/github/cohousing/cohousing-graphql-api.svg?style=for-the-badge)](https://codeclimate.com/github/cohousing/cohousing-graphql-api/maintainability)
+[![Code Climate](https://img.shields.io/codeclimate/c/cohousing/cohousing-graphql-api.svg?style=for-the-badge)](https://codeclimate.com/github/cohousing/cohousing-graphql-api/maintainability)
 
 Installation
 ------------
