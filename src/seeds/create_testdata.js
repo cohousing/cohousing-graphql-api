@@ -36,9 +36,9 @@ class TestDataLoader {
             .then(this.createUsers(this.knex))
             .then(this.associateUsersWithRoles(this.knex))
             .then(() => {
-                console.log('DONE')
+                console.log('DONE FOR', this.knex.client.connectionSettings.db);
             }, (error) => {
-                console.error(error);
+                console.error(error, 'FOR', this.knex.client.connectionSettings.db);
             });
     }
 
@@ -105,7 +105,8 @@ class TestDataLoader {
         return this.createRole('Admin', [
             TestDataLoader.addPermission('home', true, true, true, true),
             TestDataLoader.addPermission('resident', true, true, true, true),
-            TestDataLoader.addPermission('role', true, true, true, true)
+            TestDataLoader.addPermission('role', true, true, true, true),
+            TestDataLoader.addPermission('user', true, true, true, true)
         ]);
     }
 
@@ -113,7 +114,8 @@ class TestDataLoader {
         return this.createRole('User', [
             TestDataLoader.addPermission('home', false, true, false, false),
             TestDataLoader.addPermission('resident', false, true, false, false),
-            TestDataLoader.addPermission('role', false, false, false, false)
+            TestDataLoader.addPermission('role', false, false, false, false),
+            TestDataLoader.addPermission('user', false, false, false, false)
         ]);
     }
 
@@ -121,7 +123,8 @@ class TestDataLoader {
         return this.createRole('Moderator', [
             TestDataLoader.addPermission('home', true, true, true, false),
             TestDataLoader.addPermission('resident', true, true, true, false),
-            TestDataLoader.addPermission('role', false, true, false, false)
+            TestDataLoader.addPermission('role', false, true, false, false),
+            TestDataLoader.addPermission('user', false, true, false, false)
         ]);
     }
 
