@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-        at: ~/repo
+          at: ~/repo
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "yarn.lock" }}
@@ -30,7 +30,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-        at: ~/repo
+          at: ~/repo
       - run: yarn build
       - persist_to_workspace:
           root: .
@@ -44,7 +44,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-        at: ~/repo
+          at: ~/repo
       - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
       - run: chmod +x ./cc-test-reporter
       - run: ./cc-test-reporter before-build
@@ -64,8 +64,8 @@ workflows:
     jobs:
       - install_dependencies
       - build:
-        requires:
-          - install_dependencies
+          requires:
+            - install_dependencies
       - test:
-        requires:
-          - build
+          requires:
+            - build
