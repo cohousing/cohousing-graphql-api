@@ -1,5 +1,26 @@
 version: 2
 jobs:
+  install_dependencies:
+    docker:
+      - image: circleci/node:8
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - attach_workspace:
+        at: ~/repo
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "yarn.lock" }}
+      - run: yarn install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
+      - persist_to_workspace:
+          root: .
+          paths: node_modules
   build:
     docker:
       - image: circleci/node:8
@@ -8,23 +29,25 @@ jobs:
 
     steps:
       - checkout
+      - attach_workspace:
+        at: ~/repo
+      - run: yarn build
+      - persist_to_workspace:
+          root: .
+          paths: dist
+  test:
+    docker:
+      - image: circleci/node:8
 
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - attach_workspace:
+        at: ~/repo
       - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
       - run: chmod +x ./cc-test-reporter
-
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "yarn.lock" }}
-
-      - run: yarn install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "yarn.lock" }}
-
       - run: ./cc-test-reporter before-build
-
       - run:
           name: "Run Tests"
           command: yarn test -- --ci --testResultsProcessor="jest-junit"
@@ -32,10 +55,17 @@ jobs:
             JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
             JEST_JUNIT_CLASSNAME: "{classname}"
             JEST_JUNIT_TITLE: "{title}"
-
       - run: ./cc-test-reporter after-build --exit-code $EXIT_CODE $?
-
       - store_test_results:
           path: reports/junit
-
-      - run: yarn build
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - install_dependencies
+      - build:
+        requires:
+          - install_dependencies
+      - test:
+        requires:
+          - build
