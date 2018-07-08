@@ -23,7 +23,7 @@ export class BaseConnector {
 
         let self = this;
         return new Promise((resolve, reject) => {
-            if (self.user && self.user.sa || (self.user.permission && self.user.permission.indexOf(permission) > -1)) {
+            if (self.user && self.user.sa || (self.user && self.user.permission && self.user.permission.indexOf(permission) > -1)) {
                 resolve();
             } else {
                 reject(new UnauthorizedError({
