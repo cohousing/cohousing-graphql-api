@@ -6,12 +6,13 @@ export class TenantConfig {
 
         settings.tenants.forEach(tenant => {
             tenant.db = knex({
-                client: 'mariasql',
+                client: 'mysql',
+                version: '5.7',
                 connection: {
                     host: settings.db.host,
                     user: settings.db.user,
                     password: settings.db.password,
-                    db: tenant.context
+                    database: tenant.context
                 },
                 debug: settings.development.debugSql,
                 migrations: {

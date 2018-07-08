@@ -1,7 +1,8 @@
 import express from 'express';
 import {json, urlencoded} from 'body-parser';
-import {graphiqlExpress, graphqlExpress} from 'apollo-server-express';
+import {graphqlExpress} from 'apollo-server-express';
 import {formatError} from 'apollo-errors';
+import PlaygroundMiddleware from 'graphql-playground-middleware-express';
 
 import {settings} from './settings';
 import {tenant, TenantConfig} from './tenant';
@@ -25,8 +26,8 @@ app.use('/graphql', auth(settings), json(), graphqlExpress(request => ({
     context: context(request)
 })));
 
-app.use('/graphiql', graphiqlExpress({
-    endpointURL: '/graphql'
+app.use('/playground', PlaygroundMiddleware({
+    endpoint: '/graphql'
 }));
 
 app.listen(PORT);
