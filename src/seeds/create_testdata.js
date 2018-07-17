@@ -1,10 +1,10 @@
 import crypto from 'crypto';
+import fs from 'fs';
 import async from 'async';
 
-import {HomeConnector} from '../modules/home/connector';
-import {ResidentConnector} from '../modules/resident/connector';
 import {RoleConnector} from '../modules/role/connector';
 import {UserConnector} from '../modules/user/connector';
+import {createModule} from '../modules/basemodule';
 
 class TestDataLoader {
     constructor(knex) {
@@ -36,9 +36,9 @@ class TestDataLoader {
             .then(this.createUsers(this.knex))
             .then(this.associateUsersWithRoles(this.knex))
             .then(() => {
-                console.log('DONE FOR', this.knex.client.connectionSettings.db);
+                console.log('DONE FOR', this.knex.client.connectionSettings.database);
             }, (error) => {
-                console.error(error, 'FOR', this.knex.client.connectionSettings.db);
+                console.error(error, 'FOR', this.knex.client.connectionSettings.database);
             });
     }
 
@@ -69,10 +69,14 @@ class TestDataLoader {
                 super_admin: true
             };
             self.request.loggedInUser = superAdminUser;
-            self.homeConnector = new HomeConnector(self.request);
-            self.residentConnector = new ResidentConnector(self.request);
             self.roleConnector = new RoleConnector(self.request);
             self.userConnector = new UserConnector(self.request);
+
+            let homeModule = createModule(fs.readFileSync(__dirname + '/../modules/home/home.yaml', 'UTF-8'));
+            self.homeConnector = homeModule.createContext(self.request).homeConnector;
+            let residentModule = createModule(fs.readFileSync(__dirname + '/../modules/resident/resident.yaml', 'UTF-8'));
+            self.residentConnector = residentModule.createContext(self.request).residentConnector;
+
             return knex('users').insert(superAdminUser)
                 .then(adminIds => {
                     self.request.loggedInUser.id = adminIds[0];
@@ -155,7 +159,9 @@ class TestDataLoader {
         return () => {
             let homes = [];
             for (let i = 1; i <= 50; i++) {
-                homes.push(self.homeConnector.createHome('Home ' + i));
+                homes.push(self.homeConnector.create({
+                    name: 'Home ' + i
+                }));
             }
 
             return Promise.all(homes).then(homes => {
@@ -170,7 +176,10 @@ class TestDataLoader {
         return () => {
             let residents = [];
             for (let i = 1; i <= 100; i++) {
-                residents.push(self.residentConnector.createResident('Resident ' + i, self.data.homes[Math.floor(Math.random() * 50)].id));
+                residents.push(self.residentConnector.create({
+                    name: 'Resident ' + i,
+                    homeId: self.data.homes[Math.floor(Math.random() * 50)].id
+                }));
             }
 
             return Promise.all(residents).then(residents => {

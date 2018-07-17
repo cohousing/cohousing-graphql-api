@@ -4,8 +4,8 @@ exports.up = function(knex, Promise) {
             table.increments();
             table.string('name').notNullable();
 
-            table.integer('home_id').unsigned();
-            table.foreign('home_id').references('homes.id');
+            table.integer('homeId').unsigned();
+            table.foreign('homeId').references('homes.id');
         })
     ]);
 };

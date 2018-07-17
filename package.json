@@ -7,7 +7,7 @@
   "author": "Frank Bille-Stauner <frank@cohousing.nu>",
   "license": "GPL-3.0",
   "scripts": {
-    "start": "nodemon src/index.js --exec babel-node --presets es2015,stage-2 -i *.graphqls",
+    "start": "nodemon src/index.js -e js,yaml --exec babel-node --presets es2015,stage-2 -i *.graphqls",
     "build": "rimraf dist && babel src -d dist --source-maps inline --copy-files",
     "build-watch": "babel src -d dist --watch --source-maps inline --copy-files",
     "build-docker": "yarn build && docker build -t cohousing/cohousing-graphql-api .",
@@ -42,6 +42,7 @@
     "graphql": "^0.11.7",
     "graphql-playground-middleware-express": "^1.7.2",
     "graphql-tools": "^2.24.0",
+    "js-yaml": "^3.12.0",
     "jsonwebtoken": "^7.4.3",
     "knex": "^0.15.0",
     "lodash": "^4.17.10",

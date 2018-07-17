@@ -1,0 +1,16 @@
+moduleVersion: 1
+name: Resident
+models:
+  resident:
+    name: Resident
+    fields:
+      name:
+        type: String
+        required: true
+      home:
+        type: Home
+        required: false
+        relation:
+          type: many-to-one
+          foreignModelKey: home
+          relationColumn: homeId

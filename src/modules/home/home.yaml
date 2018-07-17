@@ -1,0 +1,16 @@
+moduleVersion: 1
+name: Home
+models:
+  home:
+    name: Home
+    doc: A physical space, which can have residents. Normally a house, an apartment or a room, but it can be any kind of structure representing something the individual residents own.
+    fields:
+      name:
+        type: String
+        required: true
+      residents:
+        type: "[Resident!]"
+        relation:
+          type: one-to-many
+          foreignModelKey: resident
+          relationColumn: homeId

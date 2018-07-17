@@ -1,10 +1,9 @@
 import fs from 'fs';
-import {Schema as ResidentSchema} from '../resident';
 
 const UserSchema = fs.readFileSync(__dirname + '/user.graphqls', 'UTF-8');
 
 export function Schema() {
-    return [UserSchema, ResidentSchema];
+    return [UserSchema];
 }
 
 export const Resolver = {
@@ -31,7 +30,7 @@ export const Resolver = {
     User: {
         resident(obj, args, {residentConnector}) {
             if (obj.resident_id) {
-                return residentConnector.getResident(obj.resident_id);
+                return residentConnector.getOne(obj.resident_id);
             }
             return null;
         },
