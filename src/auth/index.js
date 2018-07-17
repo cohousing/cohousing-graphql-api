@@ -66,7 +66,7 @@ export function login(settings) {
                                     passphrase: settings.auth.privateKeyPassphrase
                                 }, {
                                     algorithm: 'RS512',
-                                    expiresIn: '1d',
+                                    expiresIn: '1w',
                                     audience: req.tenant.context,
                                     subject: username
                                 });
