@@ -2,15 +2,15 @@ export const settings = {
     tenantDomain: '{tenantContext}.cohousing.nu',
 
     db: {
-        host: '127.0.0.1',
-        user: 'root',
-        password: ''
+        host: process.env.COHOUSING_DB_HOST || '127.0.0.1',
+        user: process.env.COHOUSING_DB_USER || 'root',
+        password: process.env.COHOUSING_DB_PASS || ''
     },
 
     auth: {
-        publicKeyPath: __dirname + '/../public.pem',
-        privateKeyPath: __dirname + '/../private.pem',
-        privateKeyPassphrase: 'test1234'
+        publicKeyPath: process.env.COHOUSING_PUBLIC_KEY_PATH || __dirname + '/../public.pem',
+        privateKeyPath: process.env.COHOUSING_PRIVATE_KEY_PATH || __dirname + '/../private.pem',
+        privateKeyPassphrase: process.env.COHOUSING_PRIVATE_KEY_PASSPHRASE || 'test1234'
     },
 
     development: {
