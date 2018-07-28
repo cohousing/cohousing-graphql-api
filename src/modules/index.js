@@ -5,7 +5,7 @@ import {Schema as RoleSchema, Context as RoleContext, Resolver as RoleResolver} 
 import {Schema as UserSchema, Context as UserContext, Resolver as UserResolver} from './user';
 import {Schema as AuditSchema, Context as AuditContext, Resolver as AuditResolver} from './audit';
 
-import {createModule} from './basemodule';
+import {createModule} from './module';
 
 const modules = [
     'home',

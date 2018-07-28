@@ -4,7 +4,7 @@ import async from 'async';
 
 import {RoleConnector} from '../modules/role/connector';
 import {UserConnector} from '../modules/user/connector';
-import {createModule} from '../modules/basemodule';
+import {createModule} from '../modules/module';
 
 class TestDataLoader {
     constructor(knex) {
