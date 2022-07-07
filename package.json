@@ -46,7 +46,7 @@
     "jsonwebtoken": "^7.4.3",
     "knex": "^0.15.0",
     "lodash": "^4.17.13",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "mysql": "^2.15.0"
   },
   "devDependencies": {
