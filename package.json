@@ -38,7 +38,7 @@
     "cors": "^2.8.4",
     "dataloader": "^1.4.0",
     "dataloader-sort": "^0.0.5",
-    "express": "^4.16.3",
+    "express": "^4.17.3",
     "graphql": "^0.11.7",
     "graphql-playground-middleware-express": "^1.7.2",
     "graphql-tools": "^2.24.0",
